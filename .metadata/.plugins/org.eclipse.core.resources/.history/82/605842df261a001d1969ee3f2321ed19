@@ -1,0 +1,5 @@
+package de.ems.addressbuch.exception;
+
+public class ResourceNotFoundException {
+
+}

@@ -1,0 +1,5 @@
+package de.ems.addressbuch.controller;
+
+public class AnschriftController {
+
+}

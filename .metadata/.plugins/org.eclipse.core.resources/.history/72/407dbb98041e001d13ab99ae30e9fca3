@@ -1,0 +1,58 @@
+package de.ems.addressbuch.entities;
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "AB_Person")
+public class PersonEntity {
+	
+	@Id
+	@Column(name = "Pk")
+	private String personPk;
+	@Column(name = "Vorname")
+	private String vorname;
+	@Column(name = "Nachname")
+	private String nachName;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch =FetchType.LAZY)
+	private KontaktEntity kontakt;
+
+	@Override
+	public String toString() {
+		return "PersonEntity [pk=" + personPk + ", vorname=" + vorname + ", nachName=" + nachName + "]";
+	}
+
+	public String getPk() {
+		return personPk;
+	}
+
+	public void setPk(String pk) {
+		this.personPk = pk;
+	}
+
+	public String getVorname() {
+		return vorname;
+	}
+
+	public void setVorname(String vorname) {
+		this.vorname = vorname;
+	}
+
+	public String getNachName() {
+		return nachName;
+	}
+
+	public void setNachName(String nachName) {
+		this.nachName = nachName;
+	}
+	
+	
+}

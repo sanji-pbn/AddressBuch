@@ -1,0 +1,70 @@
+
+package de.ems.addressbuch.controller;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.ems.addressbuch.model.CompleteAddress;
+import de.ems.addressbuch.model.Person;
+import de.ems.addressbuch.service.CompleteAddressService;
+import de.ems.addressbuch.service.PersonenService;
+import de.ems.addressbuch.service.PersonenServiceImpl;
+
+
+@RestController
+@RequestMapping("/api/")
+@CrossOrigin(origins = "http://localhost:4200")
+public class CompleteAddressController {
+	private static Logger log = Logger.getLogger(CompleteAddressController.class.getName());
+	
+	@Autowired
+	private CompleteAddressService completeAddressService;
+
+	@GetMapping("/versionComplete")
+	public ResponseEntity<String> getVersion() {
+		System.out.println("Complete Version Showing");
+		return new ResponseEntity<String>("V0.0.3", HttpStatus.OK);
+	}
+
+	@GetMapping("completeAddress/getAllePerson")
+	public List<CompleteAddress> getAllData() {
+		System.out.println("All Data");
+		//List<CompletAddress> completAddressList = completAddressService.getCompletAddressList();
+		return completeAddressService.getCompleteAddressList();
+	}
+	
+	@GetMapping("completeAddress/getAllePerson/{pk}")
+	public List<CompleteAddress> getAddressByPk(@PathVariable String pk){
+		return completeAddressService.getCompleteAddressByPersonPk(pk);
+	}
+	
+	@GetMapping("completeAddress/addPk")
+	public CompleteAddress createPersonPk(){
+		System.out.println("Testing testing addNewAddressBuch !!!!");		
+		return completeAddressService.createPersonPk();
+	}
+	
+	@PostMapping("completeAddress/addPerson")
+	public CompleteAddress addNewPerson(@RequestBody Person person){
+		System.out.println("Am i reaching here");
+		if (person == null)
+			log.error("No person received.");
+		else
+			log.info("Person=" + person.toString());
+		
+
+		return completeAddressService.addNewPersonAddress(person);
+	}
+	
+}

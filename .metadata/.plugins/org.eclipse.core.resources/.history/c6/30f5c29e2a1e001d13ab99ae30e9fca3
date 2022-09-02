@@ -1,0 +1,51 @@
+package de.ems.addressbuch.model;
+
+public class Kontakt {
+
+	private String pk;
+
+	private String emailOrPhone;
+	
+	private String personFk;
+	
+	public Kontakt() {
+		
+	}
+	
+	public Kontakt(String emailOrPhone, String personFk) {
+		super();
+		this.emailOrPhone = emailOrPhone;
+		this.personFk = personFk;
+	}
+
+	public String getPk() {
+		return pk;
+	}
+
+	public void setPk(String pk) {
+		this.pk = pk;
+	}
+
+	public String getEmailOrPhone() {
+		return emailOrPhone;
+	}
+
+	public void setEmailOrPhone(String emailOrPhone) {
+		this.emailOrPhone = emailOrPhone;
+	}
+
+	public String getPersonFk() {
+		return personFk;
+	}
+
+	public void setPersonFk(String personFk) {
+		this.personFk = personFk;
+	}
+
+	@Override
+	public String toString() {
+		return "Kontakt [pk=" + pk + ", emailOrPhone=" + emailOrPhone + ", personFk=" + personFk + "]";
+	}
+	
+	
+}

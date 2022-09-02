@@ -1,0 +1,151 @@
+
+package de.ems.addressbuch.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.model.Anschrift;
+import de.ems.addressbuch.model.CompleteAddress;
+import de.ems.addressbuch.model.Kontakt;
+import de.ems.addressbuch.model.Person;
+
+@Service
+public class CompleteAddressServiceImpl implements CompleteAddressService {
+	private static Logger log = Logger.getLogger(CompleteAddressServiceImpl.class.getName());
+
+	@Autowired
+	private PersonenService personenService;
+
+	@Autowired
+	private KontaktService kontaktService;
+
+	@Autowired
+	private AnschriftService anschriftService;
+
+	@Override
+	public List<CompleteAddress> getCompleteAddressList() {
+		List<CompleteAddress> completeAddressList = new ArrayList<>();
+
+		List<Person> pList = personenService.getAllPersonen();
+
+		List<Kontakt> kontaktList = kontaktService.getAlleKontakte();
+
+		List<Anschrift> anschriftenList = anschriftService.getAlleAnschrifte();
+
+		for (Person p : pList) {
+
+			CompleteAddress completeAddress = buildcompleteAddress(p, kontaktList, anschriftenList);
+
+			completeAddressList.add(completeAddress);
+		}
+		return completeAddressList;
+	}
+
+	private CompleteAddress buildcompleteAddress(Person person, List<Kontakt> kontaktList,
+			List<Anschrift> anschriftenList) {
+
+		CompleteAddress completeAddress = new CompleteAddress();
+
+		completeAddress.setPerson(person);
+
+		// getKontaktByFk(e.getPk()) -> KontaktListe
+		List<Kontakt> kontakteForPerson = getKontaktListeByPersonFk(person.getPk(), kontaktList);
+		// getAnschiftByFk(e.getPk()) -> Anschrift
+		List<Anschrift> anschriftenForPerson = getAnschriftenListeByPersonFk(person.getPk(), anschriftenList);
+
+		if (!kontakteForPerson.isEmpty())
+			completeAddress.setKontakt(kontakteForPerson.get(0));
+
+		if (!anschriftenForPerson.isEmpty())
+			completeAddress.setAnschrift(anschriftenForPerson.get(0));
+
+		return completeAddress;
+	}
+
+	private List<Anschrift> getAnschriftenListeByPersonFk(String person_fk, List<Anschrift> anschriftenList) {
+
+		List<Anschrift> anschriftenForPerson = new ArrayList<>();
+
+		if (anschriftenList == null) {
+			log.warn("AnschriftenList ist null");
+			return anschriftenForPerson;
+		}
+
+		for (Anschrift a : anschriftenList) {
+			if (person_fk.compareTo(a.getPerson_fk()) == 0)
+				anschriftenForPerson.add(a);
+		}
+
+		return anschriftenForPerson;
+	}
+
+	private List<Kontakt> getKontaktListeByPersonFk(String person_fk, List<Kontakt> gesamtListe) {
+
+		List<Kontakt> kontakteForPerson = new ArrayList<>();
+
+		if (gesamtListe == null) {
+			log.warn("GesamtListe is null!");
+			return kontakteForPerson;
+		}
+
+		for (Kontakt k : gesamtListe) {
+			if (person_fk.compareTo(k.getPerson_fk()) == 0)
+				kontakteForPerson.add(k);
+		}
+
+		return kontakteForPerson;
+	}
+
+	@Override
+	public List<CompleteAddress> getCompleteAddressByPersonPk(String pk) {
+		List<CompleteAddress> getOnePersonPk = new ArrayList<>();
+
+		List<CompleteAddress> getCompletePersonDetail = getCompleteAddressList();
+
+		for (CompleteAddress get : getCompletePersonDetail) {
+			if (pk.compareTo(get.getPerson().getPk()) == 0) {
+				getOnePersonPk.add(get);
+			}
+		}
+		return getOnePersonPk;
+	}
+
+	@Override
+	public CompleteAddress createPersonPk() {	
+		
+		CompleteAddress completeAddress = new CompleteAddress();
+
+		Person personPk = personenService.createPerson();
+		
+		System.out.println("personPk generated : " + personPk.getPk());
+		
+		// bitte kein List benutzen nur object
+		completeAddress.setPerson(personPk);
+		completeAddress.setKontakt(null);
+		completeAddress.setAnschrift(null);
+		
+		System.out.println("Filled List: " + completeAddress);
+		
+		return completeAddress;
+	}
+
+	@Override
+	public CompleteAddress addNewPersonAddress(Person addressWithPersonPk) {
+		
+		Person person = personenService.addPerson(addressWithPersonPk);
+
+		CompleteAddress completeAddress = new CompleteAddress();
+		System.out.println("testing :" + completeAddress.getPerson());
+		completeAddress.setPerson(person);
+		completeAddress.setKontakt(null);
+		completeAddress.setAnschrift(null);
+		
+		return completeAddress;
+	}
+
+
+}

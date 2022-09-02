@@ -1,0 +1,61 @@
+package de.ems.addressbuch.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+
+import de.ems.addressbuch.entities.KontaktEntity;
+import de.ems.addressbuch.repository.KontaktRepository;
+
+public class KontaktServiceImpl implements KontaktService {
+
+	@Autowired
+	private KontaktRepository kontaktRepository;
+	
+	private static Logger log = Logger.getLogger(KontaktServiceImpl.class.getName());
+
+	@Override
+	public KontaktEntity createKontakt() {
+		
+	}
+
+	@Override
+	public List<KontaktEntity> getAlleKontakte() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KontaktEntity saveKontakt(KontaktEntity kontakt) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<KontaktEntity> getKontaktByPk(String pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> deleteKontakt(String pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KontaktEntity addPersonPkToKontakt(String kontaktPk, String personFk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KontaktEntity deletePersonPkFromKontakt(String kontaktPk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

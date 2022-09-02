@@ -1,0 +1,207 @@
+package de.ems.addressbuch.entities;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+
+
+import de.ems.addressbuch.enumerations.Enum_BevorzugterKontaktweg;
+import de.ems.addressbuch.enumerations.Enum_JurOderNatPerson;
+import de.ems.addressbuch.enumerations.Enum_Vertraulich;
+
+@Entity
+@Table(name = "AB_Person")
+public class PersonEntity {
+	
+	private String personPk;
+	private String vorname;
+	private String nachname;
+	private String anrede;
+	private String title;
+	private String geburtsdatum;
+	private String geschlecht;
+	private String sterbedatum;
+	private String kurzform;
+	private String firma;
+	private Enum_Vertraulich vertraulich_Enum;
+	private Enum_BevorzugterKontaktweg bevorzugterKontaktweg_Enum;
+	private Enum_JurOderNatPerson jurOderNatPerson_Enum;
+	private String bemerkung;
+	private boolean lockDSGVO;
+	
+	@OneToOne(mappedBy = "AB_Person")
+	@PrimaryKeyJoinColumn
+	private KontaktEntity kontaktEntity;
+	
+
+
+	public PersonEntity() {
+		
+	}
+	
+	@Id
+	@Column(name = "Pk")
+	public String getPersonPk() {
+		return personPk;
+	}
+
+	public void setPersonPk(String personPk) {
+		this.personPk = personPk;
+	}
+
+	@Column(name = "Vorname")
+	public String getVorname() {
+		return vorname;
+	}
+
+	public void setVorname(String vorname) {
+		this.vorname = vorname;
+	}
+
+	@Column(name = "Nachname")
+	public String getNachname() {
+		return nachname;
+	}
+
+	public void setNachname(String nachname) {
+		this.nachname = nachname;
+	}
+
+
+	@Column(name = "Anrede")
+	public String getAnrede() {
+		return anrede;
+	}
+
+	public void setAnrede(String anrede) {
+		this.anrede = anrede;
+	}
+
+	@Column(name = "Title")
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	@Column(name = "Geburtsdatum")
+	public String getGeburtsdatum() {
+		return geburtsdatum;
+	}
+
+	public void setGeburtsdatum(String geburtsdatum) {
+		this.geburtsdatum = geburtsdatum;
+	}
+
+	@Column(name = "Geschlecht")
+	public String getGeschlecht() {
+		return geschlecht;
+	}
+
+	public void setGeschlecht(String geschlecht) {
+		this.geschlecht = geschlecht;
+	}
+
+	@Column(name = "Sterbedatum")
+	public String getSterbedatum() {
+		return sterbedatum;
+	}
+
+	public void setSterbedatum(String sterbedatum) {
+		this.sterbedatum = sterbedatum;
+	}
+
+	@Column(name = "Kurzform")
+	public String getKurzform() {
+		return kurzform;
+	}
+
+	public void setKurzform(String kurzform) {
+		this.kurzform = kurzform;
+	}
+
+	@Column(name = "Firma")
+	public String getFirma() {
+		return firma;
+	}
+
+	public void setFirma(String firma) {
+		this.firma = firma;
+	}
+
+	@Column(name = "Vertraulich_enum")
+	@Enumerated(EnumType.STRING)
+	public Enum_Vertraulich getVertraulich_Enum() {
+		return vertraulich_Enum;
+	}
+
+	public void setVertraulich_Enum(Enum_Vertraulich vertraulich_Enum) {
+		this.vertraulich_Enum = vertraulich_Enum;
+	}
+
+	@Column(name = "BevorzugterKontaktweg_enum")
+	@Enumerated(EnumType.STRING)
+	public Enum_BevorzugterKontaktweg getBevorzugterKontaktweg_Enum() {
+		return bevorzugterKontaktweg_Enum;
+	}
+
+	public void setBevorzugterKontaktweg_Enum(Enum_BevorzugterKontaktweg bevorzugterKontaktweg_Enum) {
+		this.bevorzugterKontaktweg_Enum = bevorzugterKontaktweg_Enum;
+	}
+
+	
+	@Column(name = "Bemerkung")
+	public String getBemerkung() {
+		return bemerkung;
+	}
+
+	public void setBemerkung(String bemerkung) {
+		this.bemerkung = bemerkung;
+	}
+	
+	@Column(name = "lockDSGVO")
+	public boolean isLockDSGVO() {
+		return lockDSGVO;
+	}
+
+	public void setLockDSGVO(boolean lockDSGVO) {
+		this.lockDSGVO = lockDSGVO;
+	}
+
+	@Column(name ="JurOderNatPerson_enum")
+	@Enumerated(EnumType.STRING)
+	public Enum_JurOderNatPerson getJurOderNatPerson_Enum() {
+		return jurOderNatPerson_Enum;
+	}
+
+	public void setJurOderNatPerson_Enum(Enum_JurOderNatPerson jurOderNatPerson_Enum) {
+		this.jurOderNatPerson_Enum = jurOderNatPerson_Enum;
+	}
+
+	public KontaktEntity getKontaktEntity() {
+		return kontaktEntity;
+	}
+
+	public void setKontaktEntity(KontaktEntity kontaktEntity) {
+		this.kontaktEntity = kontaktEntity;
+	}
+	
+	@Override
+	public String toString() {
+		return "PersonEntity [personPk=" + personPk + ", vorname=" + vorname + ", nachname=" + nachname + ", anrede="
+				+ anrede + ", title=" + title + ", geburtsdatum=" + geburtsdatum + ", geschlecht=" + geschlecht
+				+ ", sterbedatum=" + sterbedatum + ", kurzform=" + kurzform + ", firma=" + firma + ", vertraulich_enum="
+				+ vertraulich_Enum + ", bevorzugterKontaktweg_enum=" + bevorzugterKontaktweg_Enum
+				+ ", jurOderNatPerson_enum=" + jurOderNatPerson_Enum + ", bemerkung=" + bemerkung + ", lockDSGVO="
+				+ lockDSGVO + "]";
+	}
+
+	
+}

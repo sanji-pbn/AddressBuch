@@ -1,0 +1,8 @@
+package de.ems.addressbuch.controller;
+
+
+@RestController
+@RequestBody
+public class AnschriftController {
+
+}

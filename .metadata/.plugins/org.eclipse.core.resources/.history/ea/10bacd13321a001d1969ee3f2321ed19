@@ -1,0 +1,8 @@
+package de.ems.addressbuch.service;
+
+import de.ems.addressbuch.model.Person;
+
+public interface PersonenService {
+	Person savePerson(Person person);
+}
+ 

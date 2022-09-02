@@ -1,0 +1,18 @@
+
+package de.ems.addressbuch.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.model.CompleteAddress;
+
+
+@Service
+public interface CompleteAddressService {
+
+	public List<CompleteAddress> getCompleteAddressList();
+	
+	public List<CompleteAddress> getCompleteAddressByPersonPk(String pk);
+
+}

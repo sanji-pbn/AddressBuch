@@ -1,0 +1,79 @@
+package de.ems.addressbuch.model;
+
+public class Kontakt {
+
+	private String pk;
+
+	private String messageTyp;
+	
+	private String emailOrPhone;
+	
+	private String person_fk;
+	
+	private Boolean aktiv;
+	
+	public Kontakt() {
+		
+	}
+	
+	public Kontakt(String emailOrPhone, String personFk) {
+		super();
+		this.emailOrPhone = emailOrPhone;
+		this.person_fk = personFk;
+	}
+
+	public String getPk() {
+		return pk;
+	}
+
+	public void setPk(String pk) {
+		this.pk = pk;
+	}
+
+	
+	/*
+	 * Match with Enum_MessageTyp names
+	 */
+	public String getMessageTyp() {
+		return messageTyp;
+	}
+	public void setMessageTyp(String messageTyp) {
+		this.messageTyp = messageTyp;
+	}
+
+	
+	public String getEmailOrPhone() {
+		return emailOrPhone;
+	}
+
+	public void setEmailOrPhone(String emailOrPhone) {
+		this.emailOrPhone = emailOrPhone;
+	}
+
+
+	public String getPerson_fk() {
+		return person_fk;
+	}
+	public void setPerson_fk(String person_fk) {
+		this.person_fk = person_fk;
+	}
+
+	public Boolean getAktiv() {
+		return aktiv;
+	}
+	public void setAktiv(Boolean aktiv) {
+		this.aktiv = aktiv;
+	}
+
+	@Override
+	public String toString() {
+		return "Kontakt\n [pk=" + pk + ", messageTyp=" + messageTyp + ", emailOrPhone=" + emailOrPhone + ", person_fk="
+				+ person_fk + ", aktiv=" + aktiv + "]\n";
+	}
+
+	
+
+
+	
+	
+}

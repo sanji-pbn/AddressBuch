@@ -1,0 +1,70 @@
+package de.ems.addressbuch;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+
+import de.ems.addressbuch.entities.KontaktEntity;
+import de.ems.addressbuch.entities.PersonEntity;
+import de.ems.addressbuch.entities.Testv1Entity;
+import de.ems.addressbuch.service.KontaktService;
+import de.ems.addressbuch.service.PersonenService;
+import lombok.Builder;
+
+@SpringBootTest
+class PersonenServiceTest {
+
+	@Autowired
+	private PersonenService personenService; 
+	@Autowired
+	private KontaktService kontaktService;
+	
+	@Test
+	void contextLoads() {
+	}
+	
+
+	@Test
+	public void getAll() {
+		System.out.println("====== Start getAllPersonenKontakt =======");
+		
+		List<KontaktEntity> pList = kontaktService.getAlleKontakte();
+		
+		for (KontaktEntity p : pList)
+			System.out.println(p);
+		
+		System.out.println("====== Ende getAllPersonenKontakt =======");		
+	}
+	
+	@Test
+	public void getAllPersonen() {
+		System.out.println("====== Start getAllPersonen =======");
+		
+		List<PersonEntity> pList = personenService.getAllPersonen();
+		
+		for (PersonEntity p : pList)
+			System.out.println(p);
+		
+		System.out.println("====== Ende getAllPersonen =======");		
+	}
+	
+	
+	@Test
+	public void getAllPersonenTestv1() {
+		System.out.println("====== Start getAllPersonenTestv1 =======");
+		
+		List<Testv1Entity> pList = personenService.getAllPersonenFromTestv1();
+		
+		for (Testv1Entity p : pList)
+			System.out.println(p);
+		
+		System.out.println("====== Ende getAllPersonenTestv1 =======");		
+	}
+	
+
+}

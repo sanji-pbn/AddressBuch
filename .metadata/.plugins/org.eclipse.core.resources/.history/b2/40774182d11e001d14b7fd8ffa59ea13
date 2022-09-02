@@ -1,0 +1,27 @@
+package de.ems.addressbuch.entities;
+
+import de.ems.addressbuch.enumerations.Enum_Anschriftentyp;
+
+public class AnschriftEntity {
+
+	private String anschriftPK;
+	
+	private String person_fk;
+	
+	private String plz;
+	
+	private String ort;
+	
+	private String land;
+	
+	private String strasse;
+	
+	private boolean aktiv;
+	
+	private Enum_Anschriftentyp anschriftentyp_Enum;
+	
+	public AnschriftEntity() {
+	}
+	
+	
+}

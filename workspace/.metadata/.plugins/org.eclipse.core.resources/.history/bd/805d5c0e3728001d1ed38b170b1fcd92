@@ -1,0 +1,49 @@
+
+package de.ems.addressbuch.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.ems.addressbuch.model.CompletAddress;
+import de.ems.addressbuch.service.CompletAddressService;
+
+@RestController
+@RequestMapping("/api/")
+@CrossOrigin(origins = "http://localhost:4200")
+public class CompletAddressController {
+
+	@Autowired
+	private CompletAddressService completAddressService;
+
+	@GetMapping("/versionComplete")
+	public ResponseEntity<String> getVersion() {
+		System.out.println("Complete Version Showing");
+		return new ResponseEntity<String>("V0.0.3", HttpStatus.OK);
+	}
+
+	@GetMapping("completAddress/getAllData")
+	public List<CompletAddress> getAllData() {
+		System.out.println("All Data");
+		//List<CompletAddress> completAddressList = completAddressService.getCompletAddressList();
+		return completAddressService.getCompletAddressList();
+	}
+	
+	@GetMapping("completAddress/getByPk/{pk}")
+	public List<CompletAddress> getAddressByPk(@PathVariable String pk){
+		return completAddressService.getCompletAddressByPersonPk(pk);
+	}
+	
+	@DeleteMapping("completAddress/deleteByPersonPk/{pk}")
+	public List<CompletAddress> deleteAddressByPersonPk(@PathVariable String pk){
+		return completAddressService.deleteCompletAddressByPersonPk(pk);
+	}
+}

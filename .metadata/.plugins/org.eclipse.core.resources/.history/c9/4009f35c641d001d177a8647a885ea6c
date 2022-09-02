@@ -1,0 +1,12 @@
+package de.ems.addressbuch.service;
+
+import java.awt.print.Pageable;
+
+import org.springframework.data.domain.Page;
+
+import de.ems.addressbuch.model.Kontakt;
+
+public interface KontaktService {
+	Page<Kontakt> findByPersonId(String personPk, Pageable pageable);
+
+}

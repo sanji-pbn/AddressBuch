@@ -1,0 +1,5 @@
+package de.ems.addressbuch.service;
+
+public class PersonenServiceImpl {
+
+}

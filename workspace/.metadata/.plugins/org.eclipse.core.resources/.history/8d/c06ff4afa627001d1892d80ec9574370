@@ -1,0 +1,147 @@
+package de.ems.addressbuch.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.entities.KontaktEntity;
+import de.ems.addressbuch.enumerations.Enum_Messagetyp;
+import de.ems.addressbuch.exception.ResourceNotFoundException;
+import de.ems.addressbuch.model.Kontakt;
+import de.ems.addressbuch.model.Person;
+import de.ems.addressbuch.repository.KontaktRepository;
+import de.ems.tools.AbstractPK;
+
+@Service
+public class KontaktServiceImpl implements KontaktService {
+
+	@Autowired
+	private KontaktRepository kontaktRepository;
+
+	private static Logger log = Logger.getLogger(KontaktServiceImpl.class.getName());
+
+	// in model
+	@Override
+	public Kontakt createKontakt() {
+		Kontakt k = new Kontakt();
+		k.setPk(AbstractPK.create());
+		return k;
+	}
+
+	@Override
+	public Kontakt addPersonFk(String person_fk) {
+		
+		Kontakt k = new createKontakt();
+		k.setPerson_fk(person_fk);
+
+		return k;
+	}
+
+	// to table
+	@Override
+	public KontaktEntity addKontakt(Kontakt kontakt) {
+
+		String neuerPk = null;
+		String person_fk = null;
+
+		if (kontakt.getPk() == null)
+			neuerPk = AbstractPK.create();
+		else
+			neuerPk = kontakt.getPk();
+
+		if (kontakt.getPerson_fk() == null) {
+			log.error("Peerson_fk missing.");
+			return null;
+		}else
+			person_fk = addPersonFk(kontakt.getPerson_fk());
+					
+		KontaktEntity newKontakt = this.toEntity(kontakt);
+		newKontakt.setKontaktPk(neuerPk);
+		newKontakt.setPerson_fk(person_fk);
+		
+		
+
+		return kontaktRepository.save(newKontakt);
+	}
+
+	// to table
+	private KontaktEntity toEntity(Kontakt kontakt) {
+
+		KontaktEntity e = new KontaktEntity();
+
+		e.setKontaktPk(kontakt.getPk());
+		e.setPerson_fk(kontakt.getPerson_fk());
+		e.setEmailOrPhone(kontakt.getEmailOrPhone());
+		e.setMessagetyp_Enum(Enum_Messagetyp.valueOf(kontakt.getMessageTyp())); // Enum_Messagetyp.valueOf("EMAIL"));
+		e.setAktiv(true);
+
+		return e;
+	}
+
+	@Override
+	public List<Kontakt> getAlleKontakte() {
+		List<Kontakt> kList = new ArrayList<>();
+
+		List<KontaktEntity> eList = kontaktRepository.findAll();
+		for (KontaktEntity e : eList) {
+			kList.add(toModel(e));
+		}
+		return kList;
+	}
+
+	// from table
+	@Override
+	public Kontakt getKontaktByPk(String pk) {
+		KontaktEntity e = kontaktRepository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Kontakt not exist by PK: " + pk));
+		return toModel(e);
+	}
+
+	// from table
+	private Kontakt toModel(KontaktEntity entity) {
+		Kontakt m = new Kontakt();
+
+		m.setPk(entity.getKontaktPk());
+		m.setPerson_fk(entity.getPerson_fk());
+		m.setEmailOrPhone(entity.getEmailOrPhone());
+		// m.setMessageTyp(entity.getMessagetyp_Enum().name());
+		m.setAktiv(entity.isAktiv());
+
+		return m;
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> deleteKontakt(String pk) {
+
+		KontaktEntity kontaktDelete = kontaktRepository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Kontakt not exist by Pk: " + pk));
+
+		kontaktRepository.delete(kontaktDelete);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted Kontakt", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+
+	}
+
+	@Override
+	public ResponseEntity<KontaktEntity> updateKontakt(String pk, KontaktEntity kontaktDetails) {
+		KontaktEntity editKontakt = kontaktRepository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Kontakt not exist with PK: + " + pk));
+
+		editKontakt.setMessagetyp_Enum(kontaktDetails.getMessagetyp_Enum());
+		editKontakt.setEmailOrPhone(kontaktDetails.getEmailOrPhone());
+		editKontakt.setAktiv(kontaktDetails.isAktiv());
+
+		KontaktEntity editedKontakt = kontaktRepository.save(editKontakt);
+
+		return ResponseEntity.ok(editedKontakt);
+	}
+
+}

@@ -1,0 +1,73 @@
+package de.ems.addressbuch.entities;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.springframework.http.ResponseEntity;
+
+@Entity
+@Table (name = "AB_Kontakt")
+public class KontaktEntity {
+	@Id
+	@Column(name = "Pk")
+	private String kontaktPk;
+	
+	private String emailOrPhone;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)	
+	@JoinColumn(name = "Person_fk")
+	private ResponseEntity<PersonEntity> person;
+	public KontaktEntity() {
+		
+	}
+
+	public KontaktEntity(String emailOrPhone, ResponseEntity<PersonEntity> person) {
+		super();
+		this.emailOrPhone = emailOrPhone;
+		this.person = person;
+	}
+	
+
+	public String getKontaktPk() {
+		return kontaktPk;
+	}
+
+	public void setKontaktPk(String kontaktPk) {
+		this.kontaktPk = kontaktPk;
+	}
+
+	public String getEmailOrPhone() {
+		return emailOrPhone;
+	}
+
+	public void setEmailOrPhone(String emailOrPhone) {
+		this.emailOrPhone = emailOrPhone;
+	}
+	
+
+	public ResponseEntity<PersonEntity> getPerson() {
+		return person;
+	}
+
+	public void setPerson(ResponseEntity<PersonEntity> personFk) {
+		this.person = personFk;
+	}
+
+	@Override
+	public String toString() {
+		return "KontaktEntity [kontaktPk=" + kontaktPk + ", emailOrPhone=" + emailOrPhone + ", person=" + person + "]";
+	}
+
+	
+	
+}

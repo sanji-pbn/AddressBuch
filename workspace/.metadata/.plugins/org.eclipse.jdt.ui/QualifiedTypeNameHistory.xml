@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.repository.CompletAddressRepository"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RestController"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.service.CompletAddressService"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.model.CompletAddress"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.enumerations.Enum_Anschriftentyp"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.enumerations.Enum_Messagetyp"/>
+    <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonCreator"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.context.ConfigurableApplicationContext"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.repository.PersonenRepository"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.repository.KontaktRepository"/>
+    <fullyQualifiedTypeName name="javax.persistence.OneToMany"/>
+    <fullyQualifiedTypeName name="javax.persistence.CascadeType"/>
+    <fullyQualifiedTypeName name="javax.persistence.AccessType"/>
+    <fullyQualifiedTypeName name="javax.persistence.Access"/>
+    <fullyQualifiedTypeName name="org.hibernate.annotations.CascadeType"/>
+    <fullyQualifiedTypeName name="org.hibernate.annotations.Cascade"/>
+    <fullyQualifiedTypeName name="org.springframework.context.annotation.ComponentScan"/>
+    <fullyQualifiedTypeName name="org.hibernate.SessionFactory"/>
+    <fullyQualifiedTypeName name="org.hibernate.Session"/>
+    <fullyQualifiedTypeName name="org.hibernate.Criteria"/>
+    <fullyQualifiedTypeName name="org.hibernate.annotations.common.util.StringHelper"/>
+    <fullyQualifiedTypeName name="org.hibernate.criterion.Restrictions"/>
+    <fullyQualifiedTypeName name="javax.persistence.ManyToOne"/>
+    <fullyQualifiedTypeName name="javax.persistence.JoinColumn"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.service.KontaktService"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.service.CompleteAddressService"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.model.CompleteAddress"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.service.PersonenService"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.service.PersonenServiceImpl"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.model.Person"/>
+    <fullyQualifiedTypeName name="de.ems.tools.AbstractPK"/>
+    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.entities.PersonEntity"/>
+    <fullyQualifiedTypeName name="de.ems.addressbuch.model.Kontakt"/>
+</qualifiedTypeNameHistroy>

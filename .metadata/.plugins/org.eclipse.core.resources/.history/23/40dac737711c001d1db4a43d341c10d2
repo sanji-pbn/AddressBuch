@@ -1,0 +1,64 @@
+package de.ems.addressbuch;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+
+import de.ems.addressbuch.model.Person;
+import de.ems.addressbuch.model.Testv1Entity;
+import de.ems.addressbuch.service.PersonenService;
+import lombok.Builder;
+
+@SpringBootTest
+class PersonenServiceTest {
+
+	@Autowired
+	private PersonenService personenService; 
+	
+	@Test
+	void contextLoads() {
+	}
+
+	@Test
+	public void getAllPersonen() {
+		System.out.println("====== Start getAllPersonen =======");
+		
+		List<Person> pList = personenService.getAllPersonen();
+		
+		for (Person p : pList)
+			System.out.println(p);
+		
+		System.out.println("====== Ende getAllPersonen =======");		
+	}
+	
+	
+	@Test
+	public void getAllPersonenTestv1() {
+		System.out.println("====== Start getAllPersonenTestv1 =======");
+		
+		List<Testv1Entity> pList = personenService.getAllPersonenFromTestv1();
+		
+		for (Testv1Entity p : pList)
+			System.out.println(p);
+		
+		System.out.println("====== Ende getAllPersonenTestv1 =======");		
+	}
+	
+	@Test
+	@Rollback(value = false)
+	@Builder
+	public void saveEmployeeTest() {
+		
+		System.out.println("----AM i Creating Something-------");
+		Person person = personenService.savePerson(new Person("Anit", "Magar"));
+		
+		assertThat(person.getPk()).hasSizeGreaterThan(1);
+		System.out.println("----- Did I reach here -------");
+	}
+
+}

@@ -1,0 +1,12 @@
+package de.ems.addressbuch.service;
+
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+
+import de.ems.addressbuch.model.Kontakt;
+
+public interface KontaktService {
+	Page<Kontakt> findByPersonPk(String personPk);
+	Optional<Kontakt> findByPkAndPersonPk(String kontaktPk, String personPk);
+}

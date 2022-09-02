@@ -1,0 +1,18 @@
+package de.ems.addressbuch;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import de.ems.addressbuch.repository.KontaktRepository;
+import de.ems.addressbuch.repository.PersonenRepository;
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		ConfigurableApplicationContext configurableApplicationContext = 
+				SpringApplication.run(Application.class, args);
+}
+
+}

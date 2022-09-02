@@ -1,0 +1,43 @@
+package de.ems.addressbuch.enumerations;
+
+public enum Enum_Anschriftentyp {
+	 POSTADRESSE(1,"Postadresse"),    
+	   WOHNADRESSE(2,"Wohnadresse"),
+	   ZWEITWOHNSITZ(3,"Zweitwohnsitz"),
+	   FIRMENADRESSE(4,"Firmenadresse");
+	   
+	   private Integer id;
+	   private String bezeichnung;
+	   
+	   Enum_Anschriftentyp(Integer id, String bezeichnung) {
+	       this.id = id;
+	       this.bezeichnung = bezeichnung;
+	   }
+	 
+	   public Integer getId() {
+	       return id;
+	   }
+	   public void setId(Integer id) {
+	       this.id = id;
+	   }
+	 
+	   public String getBezeichnung() {
+	       return bezeichnung;
+	   }
+	   public void setBezeichnung(String bezeichnung) {
+	       this.bezeichnung = bezeichnung;
+	   }
+	   
+	   @Override
+	   public String toString() {
+	       return this.bezeichnung;
+	   }
+	 
+	   public static Enum_Anschriftentyp getEnumById(int id) {
+	       for (Enum_Anschriftentyp g : Enum_Anschriftentyp.values()) {
+	           if (g.getId().intValue() == id)
+	               return g;
+	       }
+	       return null;
+	   }
+}

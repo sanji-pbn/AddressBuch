@@ -1,0 +1,76 @@
+package de.ems.addressbuch.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.ems.addressbuch.model.Person;
+import de.ems.addressbuch.model.Testv1Entity;
+import de.ems.addressbuch.repository.PersonenRepository;
+import de.ems.addressbuch.repository.Testv1Repository;
+import de.ems.addressbuch.service.PersonenService;
+
+@RestController
+@RequestMapping("/api/personen/")
+public class PersonenController {
+	@Autowired
+	private PersonenService personenService;
+//	private PersonenRepository personenService;
+	// private Testv1Repository personenService;
+
+	@GetMapping("/version")
+	public ResponseEntity<String> getVersion() {
+		System.out.println("Enter Version");
+		return new ResponseEntity<String>("V0.0.1", HttpStatus.OK);
+	}
+
+	@GetMapping("/allepersonen")
+	public List<Person> getAllPersonen() {
+		System.out.println("getAllPersonen");
+		return personenService.getAllPersonen();
+	}
+
+	// create person restAPI
+
+	@PostMapping("/create")
+	public Person createEmployee(@RequestBody Person person) {
+		System.out.println("Testing for creating");
+		return personenService.savePerson(person);
+	}
+	
+	@PostMapping("/createTest")
+	public Testv1Entity createTest(@RequestBody Testv1Entity testPerson) {
+		return personenService.saveTest(testPerson);
+	}
+
+//	@GetMapping("/allepersonentestv1")
+//	public List<Testv1Entity> getAllPersonenTestv1(){
+//		System.out.println("I am working here");
+//		return personenService.getAllPersonenFromTestv1();
+//	}
+	/*
+	 * public List<Testv1Entity> getAllPersonenTestv1() {
+	 * 
+	 * // public ResponseEntity<List<Testv1Entity>> getAllPersonenTestv1() {
+	 * System.out.println(">>>Enter allepersonentestv1"); List<Testv1Entity> pList =
+	 * personenService.getAllPersonenFromTestv1();
+	 * 
+	 * if (pList==null) { System.out.println("is null"); //return new
+	 * ResponseEntity<List<Testv1Entity>>(new
+	 * ArrayList<Testv1Entity>(),HttpStatus.NO_CONTENT); return null; } else {
+	 * System.out.println("not null");
+	 * 
+	 * for (Testv1Entity p : pList) System.out.println(p);
+	 * 
+	 * //return new ResponseEntity<List<Testv1Entity>>(pList,HttpStatus.OK); return
+	 * personenService.getAllPersonenFromTestv1(); } }
+	 */
+}

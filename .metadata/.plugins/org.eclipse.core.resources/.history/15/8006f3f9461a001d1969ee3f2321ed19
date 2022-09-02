@@ -1,0 +1,32 @@
+package de.ems.addressbuch.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.model.Person;
+import de.ems.addressbuch.model.Testv1Entity;
+import de.ems.addressbuch.repository.PersonenRepository;
+import de.ems.addressbuch.service.PersonenService;
+
+
+@Service
+public class PersonenServiceImpl implements PersonenService {
+
+	@Autowired
+	private PersonenRepository personenRepository;
+	@Override
+	public Person savePerson(Person person) {
+		return personenRepository.save(person);
+	}
+	@Override
+	public List<Person> getAllPersonen() {
+		return personenRepository.findAll();
+	}
+
+	@Override
+	public List<Testv1Entity> getAllPersonenFromTestv1() {
+		return personenRepository.findAll();
+	}
+}

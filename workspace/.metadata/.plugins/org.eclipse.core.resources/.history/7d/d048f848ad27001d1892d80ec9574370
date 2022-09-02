@@ -1,0 +1,34 @@
+package de.ems.addressbuch.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import de.ems.addressbuch.entities.KontaktEntity;
+import de.ems.addressbuch.model.Kontakt;
+
+public interface KontaktService {
+	
+	public Kontakt createKontakt(String person_fk);
+	
+	public Kontakt addKontakt(Kontakt kontakt);
+
+	
+	
+	public List<Kontakt> getAlleKontakte();
+	
+	public Kontakt addKontakt(Kontakt kontakt,  String person_fk);
+	
+	public Kontakt getKontaktByPk(String pk);
+	
+	public ResponseEntity<KontaktEntity> updateKontakt(String pk, KontaktEntity kontaktDetails);
+	
+	public ResponseEntity<Map<String,Boolean>> deleteKontakt(String pk);
+
+
+
+
+		
+}

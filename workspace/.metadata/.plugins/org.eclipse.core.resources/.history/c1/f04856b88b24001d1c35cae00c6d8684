@@ -1,0 +1,111 @@
+package de.ems.addressbuch.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.entities.AnschriftEntity;
+import de.ems.addressbuch.enumerations.Enum_Anschriftentyp;
+import de.ems.addressbuch.exception.ResourceNotFoundException;
+import de.ems.addressbuch.model.Anschrift;
+import de.ems.addressbuch.repository.AnschriftRepository;
+import de.ems.tools.AbstractPK;
+
+@Service
+public class AnschriftServiceImpl implements AnschriftService {
+	
+	@Autowired
+	private AnschriftRepository anschriftRepository;
+
+	private static Logger log = Logger.getLogger(AnschriftServiceImpl.class.getName());
+	
+	@Override
+	public Anschrift createAnschrift() {
+		Anschrift a = new Anschrift();
+		a.setPk(AbstractPK.create());
+		return a;
+	}
+
+	@Override
+	public List<AnschriftEntity> getAlleAnschrifte() {
+		return anschriftRepository.findAll();
+	}
+
+	@Override
+	public AnschriftEntity addAnschrift(Anschrift anschrift) {
+		if(anschrift == null) {
+			log.error("Anschrift is not available");
+		}else
+			System.out.println(anschrift.toString());
+		
+		AnschriftEntity newAnschrift = this.toEntity(anschrift);
+	
+		return anschriftRepository.save(newAnschrift);
+	}
+
+	@Override
+	public Anschrift getAnschriftByPk(String pk) {
+		AnschriftEntity e = anschriftRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Adresse existiert nicht : " + pk));
+		return toModel(e);
+	}
+
+	@Override
+	public ResponseEntity<AnschriftEntity> updateAnschrift(String pk, AnschriftEntity anschriftDetails) {
+		AnschriftEntity editAnschrift = anschriftRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Adresse existiert nicht : " + pk));
+		
+		editAnschrift.setPlz(anschriftDetails.getPlz());
+		editAnschrift.setOrt(anschriftDetails.getOrt());
+		editAnschrift.setLand(anschriftDetails.getLand());
+		editAnschrift.setStrasse(anschriftDetails.getStrasse());
+		editAnschrift.setAnschriftentyp_Enum(anschriftDetails.getAnschriftentyp_Enum());
+		editAnschrift.setAktiv(anschriftDetails.isAktiv());
+		
+		AnschriftEntity editedAnschrift = anschriftRepository.save(editAnschrift);
+		
+		return ResponseEntity.ok(editedAnschrift);
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> deleteAnschrift(String pk) {
+		AnschriftEntity anschriftDelete = anschriftRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Adresse existiert nicht : " + pk));
+		
+		anschriftRepository.delete(anschriftDelete);
+		
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("Adresse delete", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
+
+	private AnschriftEntity toEntity(Anschrift anschrift) {
+		AnschriftEntity e = new AnschriftEntity();
+		
+		e.setPerson_fk(anschrift.getPerson_fk());
+		e.setPlz(anschrift.getPlz());
+		e.setOrt(anschrift.getOrt());
+		e.setLand(anschrift.getLand());
+		e.setStrasse(anschrift.getStrasse());
+		e.setAnschriftentyp_Enum(Enum_Anschriftentyp.valueOf(anschrift.getAnschriftentyp()));
+		e.setAktiv(true);
+		
+		return e; 
+	}
+	
+	// from table
+	private Anschrift toModel(AnschriftEntity entity) {
+		Anschrift m = new Anschrift();
+		m.setPerson_fk(entity.getAnschriftPK());
+		m.setPlz(entity.getPlz());
+		m.setOrt(entity.getOrt());
+		m.setLand(entity.getLand());
+		m.setStrasse(entity.getStrasse());
+		m.setAktiv(true);
+		
+		return m;
+	}
+
+}

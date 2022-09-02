@@ -1,0 +1,10 @@
+package de.ems.addressbuch.service;
+
+import java.util.List;
+
+import de.ems.addressbuch.entities.KontaktEntity;
+
+public interface KontaktService {
+	
+	public List<KontaktEntity> getKontakt();
+}

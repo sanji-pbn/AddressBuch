@@ -1,0 +1,48 @@
+package de.ems.addressbuch.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.ems.addressbuch.entities.KontaktEntity;
+import de.ems.addressbuch.model.Kontakt;
+import de.ems.addressbuch.service.KontaktService;
+
+@RestController
+@RequestMapping("/api/")
+public class KontaktController {
+
+	@Autowired
+	private KontaktService kontaktService;
+
+	@GetMapping("/versiontype")
+	public ResponseEntity<String> getVersion() {
+		System.out.println("Enter Version");
+		return new ResponseEntity<String>("V0.0.2.Kontakt", HttpStatus.OK);
+	}
+	
+	@GetMapping("/kontakte")
+	public ResponseEntity<List<KontaktEntity>> getAlleKontakte(){
+		List<KontaktEntity> kontaktEntity = kontaktService.getAlleKontakte();
+        return new ResponseEntity<List<KontaktEntity>>(kontaktEntity, HttpStatus.OK);
+
+	  //return new ResponseEntity<List<KotaktEntity>>(kontaktEntity,HttpStatus.OK);
+	}
+	
+	// create person restAPI
+
+	@PostMapping("/create")
+	public KontaktEntity createKontakt(@RequestBody Kontakt kontakt) {
+		System.out.println("Testing for creating");
+		return kontaktService.saveKontakt(kontakt);
+	}
+
+}

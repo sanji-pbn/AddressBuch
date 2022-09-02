@@ -1,0 +1,37 @@
+package de.ems.addressbuch.model;
+
+import java.util.List;
+
+public class CompleteAddress {
+	private Person person;
+	private Kontakt kontakt;
+	private Anschrift anschrift;
+	
+	public CompleteAddress() {
+		
+	}
+	
+	public Person getPerson() {
+		return person;
+	}
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+	public Kontakt getKontakt() {
+		return kontakt;
+	}
+	public void setKontakt(Kontakt kontakt) {
+		this.kontakt = kontakt;
+	}
+	public Anschrift getAnschrift() {
+		return anschrift;
+	}
+	public void setAnschrift(Anschrift anschrift) {
+		this.anschrift = anschrift;
+	}
+	
+	@Override
+	public String toString() {
+		return "CompleteAddress [person=" + person + ", kontakt=" + kontakt + ", anschrift=" + anschrift + "]";
+	}	
+}

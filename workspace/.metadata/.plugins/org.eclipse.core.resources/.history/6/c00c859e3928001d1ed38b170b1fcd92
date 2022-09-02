@@ -1,0 +1,49 @@
+package de.ems.addressbuch.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.entities.PersonEntity;
+import de.ems.addressbuch.entities.Testv1Entity;
+import de.ems.addressbuch.model.Person;
+
+@Service
+public interface PersonenService {
+
+	// View
+	public List<Person> getAllPersonen();
+
+	// Create C
+	public Person createPerson();
+
+	// Save
+	public PersonEntity addPerson(Person person);
+
+	// Read R
+	public Person getPersonByPk(String pk); 
+
+	// Update U
+	public ResponseEntity<PersonEntity> updatePerson(String pk, PersonEntity personDetails);
+
+	// Delete D
+	public ResponseEntity<Map<String, Boolean>> deletePerson(String pk);
+	
+	
+	
+
+	// testing all the CRUD part
+
+	public List<Testv1Entity> getAllPersonenFromTestv1();
+
+	public Testv1Entity saveTest(Testv1Entity testPerson);
+
+	public ResponseEntity<Testv1Entity> getPersonByPkTest(Long pk);
+
+	public ResponseEntity<Testv1Entity> updatePersonTest(Long pk, Testv1Entity personDetailsTest);
+
+	public ResponseEntity<Map<String, Boolean>> deletePersonTest(Long pk);
+
+}

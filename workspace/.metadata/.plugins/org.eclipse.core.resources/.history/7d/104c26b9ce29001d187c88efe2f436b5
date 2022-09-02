@@ -1,0 +1,209 @@
+package de.ems.addressbuch.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.entities.PersonEntity;
+import de.ems.addressbuch.entities.Testv1Entity;
+import de.ems.addressbuch.exception.ResourceNotFoundException;
+import de.ems.addressbuch.model.Person;
+import de.ems.addressbuch.repository.PersonenRepository;
+import de.ems.addressbuch.repository.Testv1Repository;
+import de.ems.tools.AbstractPK;
+
+@Service
+public class PersonenServiceImpl implements PersonenService {
+
+	@Autowired
+	private PersonenRepository personenRepository;
+
+	@Autowired
+	private Testv1Repository testv1Repository;
+
+	private static Logger log = Logger.getLogger(PersonenServiceImpl.class.getName());
+
+	// in model
+	@Override
+	public Person createPerson() {
+		Person p = new Person();
+		p.setPk(AbstractPK.create());
+		return p;
+	}
+	
+	/*
+	 * @Override public PersonEntity modelPerson(PersonEntity person) { PersonEntity
+	 * newPerson = createPerson();
+	 * 
+	 * newPerson.setVorname(person.getVorname());
+	 * newPerson.setNachName(person.getNachName());
+	 * 
+	 * return newPerson; }
+	 */
+
+	// to table
+	@Override
+	public Person addPerson(Person person) {
+
+		if (person == null) {
+			log.error("Person ist null");
+		} else
+			System.out.println(person.getPk());
+
+		PersonEntity newPerson = this.toEntity(person);
+				
+		return this.toModel(personenRepository.save(newPerson));
+	}
+	
+
+	// to table
+	private PersonEntity toEntity(Person person) {
+		PersonEntity e = new PersonEntity();
+		
+		// entity ---------- model
+		e.setPersonPk(person.getPk());
+		e.setVorname(person.getVorname());
+		e.setNachname(person.getNachname());
+		e.setAnrede(person.getAnrede());
+		e.setTitle(person.getTitle());
+		e.setFirma(person.getFirma());
+		e.setKurzform(person.getKurzform());
+		e.setGeschlecht(person.getGeschlecht());
+		e.setGeburtsdatum(person.getGeburtsdatum());
+		e.setSterbedatum(person.getSterbedatum());
+		e.setBemerkung(person.getBemerkung());		
+		
+		return e;
+	}
+	
+	/*
+	@Override
+	public List<PersonEntity> getAllPersonen() {
+		return personenRepository.findAll();
+	}
+	*/
+	
+	@Override
+	public List<Person> getAllPersonen() {
+		List<Person> pList = new ArrayList<>();		
+		List<PersonEntity> eList = personenRepository.findAll();
+		for (PersonEntity e : eList) {
+			pList.add(toModel(e));
+		}
+		return pList;
+	}
+
+	// from table
+	@Override
+	public Person getPersonByPk(String pk) {
+		PersonEntity e = personenRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Person not exist with pk: " + pk));
+		
+		return toModel(e);		
+	}
+
+	// from table
+	private Person toModel(PersonEntity entity) {
+		Person m = new Person();
+		
+		// model ----------- entity
+		m.setPk(entity.getPersonPk());
+		m.setVorname(entity.getVorname());
+		m.setNachname(entity.getNachname());
+		m.setAnrede(entity.getAnrede());
+		m.setTitle(entity.getTitle());
+		m.setFirma(entity.getFirma());
+		m.setKurzform(entity.getKurzform());
+		m.setGeschlecht(entity.getGeschlecht());
+		m.setGeburtsdatum(entity.getGeburtsdatum());
+		m.setSterbedatum(entity.getSterbedatum());
+		m.setBemerkung(entity.getBemerkung());		
+		
+		return m;
+	}
+
+	@Override
+	public ResponseEntity<PersonEntity> updatePerson(String pk, PersonEntity personDetails) {
+		PersonEntity editPerson = personenRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Person not exist with pk: " + pk));
+		
+		editPerson.setVorname(personDetails.getVorname());
+		editPerson.setNachname(personDetails.getNachname());
+		editPerson.setAnrede(personDetails.getAnrede());
+		editPerson.setTitle(personDetails.getTitle());
+		editPerson.setFirma(personDetails.getFirma());
+		editPerson.setKurzform(personDetails.getKurzform());
+		editPerson.setGeschlecht(personDetails.getGeschlecht());
+		editPerson.setGeburtsdatum(personDetails.getGeburtsdatum());
+		editPerson.setSterbedatum(personDetails.getSterbedatum());
+		editPerson.setBemerkung(personDetails.getBemerkung());
+		//editPerson.setVertraulich_Enum(personDetails.getVertraulich_Enum());
+		//editPerson.setLockDSGVO(personDetails.isLockDSGVO());		
+		
+		PersonEntity updatedPerson = personenRepository.save(editPerson);
+		
+		return ResponseEntity.ok(updatedPerson);
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> deletePerson(String pk) {
+		PersonEntity personDelete = personenRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Person not exist with pk: " + pk));
+		
+		personenRepository.delete(personDelete);
+		
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
+
+	
+	// test section
+	@Override
+	public Testv1Entity saveTest(Testv1Entity testPerson) {
+		return testv1Repository.save(testPerson);
+	}
+
+	@Override
+	public List<Testv1Entity> getAllPersonenFromTestv1() {
+		return testv1Repository.findAll();
+	}
+
+	@Override
+	public ResponseEntity<Testv1Entity> getPersonByPkTest(Long pk) {
+		Testv1Entity personTest = testv1Repository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Person not exist with pk: " + pk));
+
+		return ResponseEntity.ok(personTest);
+	}
+
+	@Override
+	public ResponseEntity<Testv1Entity> updatePersonTest(Long pk, Testv1Entity personDetailsTest) {
+		Testv1Entity personTest = testv1Repository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Person not exist with pk: " + pk));
+
+		personTest.setVorname(personDetailsTest.getVorname());
+		personTest.setNachName(personDetailsTest.getNachName());
+		personTest.setEmailId(personDetailsTest.getEmailId());
+
+		Testv1Entity updatedPersonTest = testv1Repository.save(personTest);
+		return ResponseEntity.ok(updatedPersonTest);
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> deletePersonTest(Long pk) {
+		Testv1Entity personTest = testv1Repository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Person not exist with pk: " + pk));
+
+		testv1Repository.delete(personTest);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
+
+
+
+}

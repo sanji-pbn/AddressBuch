@@ -1,0 +1,5 @@
+package de.ems.addressbuch.repository;
+
+public class PersonenRepository {
+
+}

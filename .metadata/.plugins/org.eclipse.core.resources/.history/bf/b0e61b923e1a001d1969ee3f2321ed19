@@ -1,0 +1,12 @@
+package de.ems.addressbuch.service;
+
+import java.util.List;
+
+import de.ems.addressbuch.model.Person;
+
+public interface PersonenService {
+	Person savePerson(Person person);
+	
+	List<Person> getAllPersonen();
+}
+ 
