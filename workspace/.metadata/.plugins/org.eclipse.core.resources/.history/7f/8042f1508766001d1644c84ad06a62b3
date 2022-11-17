@@ -1,0 +1,17 @@
+package de.ems.addressbuch.service;
+
+import java.io.Writer;
+
+import org.apache.log4j.Logger;
+
+public class CsvExportServiceImpl implements CsvExportService {
+	
+	private static Logger log = Logger.getLogger(PersonenServiceImpl.class.getName());
+
+	@Override
+	public void writeUsersToCsv(Writer writer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -1,0 +1,28 @@
+package de.ems.addressbuch.service;
+
+import java.io.Writer;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import de.ems.addressbuch.model.CompleteAddress;
+
+public class CsvExportServiceImpl implements CsvExportService {
+	
+	private static Logger log = Logger.getLogger(PersonenServiceImpl.class.getName());
+
+	@Autowired
+	private CompleteAddressService completeAddressService;
+	
+	@Autowired
+	private PersonenService personenService;
+	
+	@Override
+	public void writeUsersToCsv(Writer writer) {
+		// TODO Auto-generated method stub
+		List<CompleteAddress> completeAddressList = completeAddressService.getCompleteAddressList();
+		
+	}
+
+}

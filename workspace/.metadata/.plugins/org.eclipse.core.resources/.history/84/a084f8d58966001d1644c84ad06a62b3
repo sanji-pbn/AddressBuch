@@ -1,0 +1,42 @@
+package de.ems.addressbuch.service;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import de.ems.addressbuch.model.CompleteAddress;
+import de.ems.addressbuch.model.Person;
+
+public class CsvExportServiceImpl implements CsvExportService {
+	
+	private static Logger log = Logger.getLogger(PersonenServiceImpl.class.getName());
+
+	@Autowired
+	private CompleteAddressService completeAddressService;
+	
+	@Autowired
+	private PersonenService personenService;
+
+	@Override
+	public void writeUsersToCsv(Writer writer) {
+		
+		List<Person> person = personenService.getAllPersonen();
+		
+		try(CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)){
+			for(Person p : person) {
+				csvPrinter.printRecord(p.getPk(), p.getAnrede(), p.getTitle(), p.getVorname(), p.getNachname(), p.getFirma());
+			}
+			
+		} catch(IOException e) {
+			log.error("Error While writing CSV ", e);
+		}
+		
+	}
+	
+
+}

@@ -1,0 +1,122 @@
+package de.ems.addressbuch.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import de.ems.addressbuch.entities.Adrb_PersonEntity;
+import de.ems.addressbuch.entities.AllAddressBookEntity;
+import de.ems.addressbuch.model.Adrb_Person;
+import de.ems.addressbuch.model.AllAddressBook;
+import de.ems.addressbuch.repository.Adrb_PersonRepository;
+import de.ems.tools.AbstractPK;
+
+@Service
+public class Adrb_PersonServiceImpl implements Adrb_PersonService{
+	
+	@Autowired
+	private Adrb_PersonRepository adrbPersonRepository;
+	
+	private static Logger log = Logger.getLogger(Adrb_PersonServiceImpl.class.getName());
+
+
+	@Override
+	public List<Adrb_Person> getAll() {
+		List<Adrb_Person> aList = new ArrayList<>();
+		List<Adrb_PersonEntity> bList = adrbPersonRepository.findAll();
+		for (Adrb_PersonEntity b : bList) {
+			aList.add(toModel(b));
+		}		
+		return aList;
+	}
+
+	
+	@Override
+	public Adrb_Person createPk() {
+		Adrb_Person p = new Adrb_Person();
+		p.setPk(AbstractPK.create());
+		return p;
+	}
+
+	@Override
+	public Adrb_Person addAdrbPersonPk(Adrb_Person adrb_Person) {
+		if(adrb_Person == null) {
+			log.error("AdrbPerson is empty");
+			return null;
+		}
+		
+		Adrb_PersonEntity newAdrbPerson = this.toEntity(adrb_Person);
+		
+		return this.toModel(adrbPersonRepository.save(newAdrbPerson));
+	}
+	
+	@Override
+	public List<Adrb_Person> getPersonFkByAdrbFk(String adrbFk) {
+		List<Adrb_PersonEntity> personFk = adrbPersonRepository.findAll();
+		
+		List<Adrb_Person> aFk = new ArrayList<>();
+		
+		for(Adrb_PersonEntity ae : personFk) {
+			if(adrbFk.compareTo(ae.getAdrbFk()) == 0) {
+				aFk.add(toModel(ae));
+			}
+		}		
+		return aFk;
+	}
+	
+	// to table
+	private Adrb_PersonEntity toEntity(Adrb_Person adrbPerson) {
+		Adrb_PersonEntity ap = new Adrb_PersonEntity();
+		
+		ap.setAdrbFk(adrbPerson.getAdrbFk());
+		ap.setPersonFk(adrbPerson.getPersonFk());
+		ap.setPk(adrbPerson.getPk());
+		
+		return ap;
+	}
+	
+	// from table
+	private Adrb_Person toModel(Adrb_PersonEntity entity) {
+		Adrb_Person ap = new Adrb_Person();
+		
+		ap.setAdrbFk(entity.getAdrbFk());
+		ap.setPersonFk(entity.getPersonFk());
+		ap.setPk(entity.getPk());
+		
+		return ap;
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> removeAdrbPersonByAdrbPK(String adrbPk) {
+		
+		List<Adrb_PersonEntity> allAdrbPerson = adrbPersonRepository.findAll();
+		
+		Adrb_PersonEntity adrbPerson = null;
+		
+		for(Adrb_PersonEntity a : allAdrbPerson) {
+			if(adrbPk.compareTo(a.getAdrbFk()) == 0) {
+				adrbPerson = a;
+				System.out.println(adrbPerson.toString());
+				break;
+			}
+		}
+		
+		if (adrbPerson != null)
+			adrbPersonRepository.delete(adrbPerson);
+		
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
+
+
+		
+	
+}

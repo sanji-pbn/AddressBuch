@@ -1,0 +1,30 @@
+package de.ems.addressbuch.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.model.Anschrift;
+
+@Service
+public interface AnschriftService {
+
+	public Anschrift createAnschrift(String person_fk);
+
+	public List<Anschrift> getAlleAnschrifte();
+	
+	public Anschrift addAnschrift(Anschrift anschrift);
+	
+	public Anschrift getAnschriftByPk(String pk);
+	
+	public List<Anschrift> getAnschriftByPersonFk(String person_fk);
+	
+	public Anschrift updateAnschrift(String pk, Anschrift anschriftDetails);
+	
+	public ResponseEntity<Map<String, Boolean>> deleteAnschriftByPersonPk(String pk);
+	
+	public ResponseEntity<Map<String, Boolean>> deleteAnschriftByAnschriftPk(String pk);
+
+}

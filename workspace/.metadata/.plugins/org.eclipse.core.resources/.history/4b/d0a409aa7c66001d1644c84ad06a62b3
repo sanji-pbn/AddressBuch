@@ -1,0 +1,78 @@
+package de.ems.addressbuch.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.ems.addressbuch.model.Anschrift;
+import de.ems.addressbuch.service.AnschriftService;
+
+@RestController
+@RequestMapping("/api/")
+@CrossOrigin()
+public class AnschriftController {
+
+	@Autowired
+	private AnschriftService anschriftService;
+
+	@GetMapping("/versionanschrift")
+	public ResponseEntity<String> getVersion() {
+		System.out.println("Enter Version anschrift");
+		return new ResponseEntity<String>("V0.0.2", HttpStatus.OK);
+	}
+
+	@GetMapping("/personen/anschriften/getAnschrift")
+	public List<Anschrift> getAllAnschrift() {
+		return anschriftService.getAlleAnschrifte();
+	}
+
+	@GetMapping("/anschrift/create/{person_fk}")
+	public ResponseEntity<Anschrift> create(@PathVariable String person_fk) {
+
+		return ResponseEntity.ok(anschriftService.createAnschrift(person_fk));
+	}
+
+	@PostMapping("/anschrift/add")
+	public Anschrift addAnschrift(@RequestBody Anschrift anschrift) {
+
+		return anschriftService.addAnschrift(anschrift);
+	}
+
+	// get by pk
+	@GetMapping("/anschrift/getAnschrift/{pk}")
+	public ResponseEntity<Anschrift> getAnschriftByPk(@PathVariable String pk) {
+
+		Anschrift getAnschrift = anschriftService.getAnschriftByPk(pk);
+		return new ResponseEntity<>(getAnschrift, HttpStatus.OK);
+	}
+
+	@GetMapping("/personen/anschriften/getAnschrift/{personFk}")
+	public List<Anschrift> getAnschriftenWithPersonFk(@PathVariable String personFk) {
+		return anschriftService.getAnschriftByPersonFk(personFk);
+	}
+
+	// update anschrift
+	@PutMapping("/personen/anschriften/update/{pk}")
+	public Anschrift updateAnschrift(@PathVariable String pk, @RequestBody Anschrift details) {
+		
+		return anschriftService.updateAnschrift(pk, details);
+	}
+
+	// delete anschrift
+	@DeleteMapping("/anschrift/delete/{pk}")
+	public ResponseEntity<Map<String, Boolean>> deleteAnschrift(@PathVariable String pk) {
+		return anschriftService.deleteAnschriftByAnschriftPk(pk);
+	}
+}

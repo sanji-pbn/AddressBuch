@@ -1,0 +1,265 @@
+package de.ems.addressbuch.service;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.univocity.parsers.common.record.Record;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
+
+import de.ems.addressbuch.entities.KontaktEntity;
+import de.ems.addressbuch.enumerations.Enum_Messagetyp;
+import de.ems.addressbuch.exception.ResourceNotFoundException;
+import de.ems.addressbuch.model.Kontakt;
+import de.ems.addressbuch.repository.KontaktRepository;
+import de.ems.tools.AbstractPK;
+
+@Service
+public class KontaktServiceImpl implements KontaktService {
+
+	@Autowired
+	private KontaktRepository kontaktRepository;
+
+	private static Logger log = Logger.getLogger(KontaktServiceImpl.class.getName());
+
+	// in model
+	@Override
+	public Kontakt createKontakt(String person_fk) {
+		Kontakt k = new Kontakt();
+		k.setPk(AbstractPK.create());
+		k.setPerson_fk(person_fk);
+		k.setAktiv(Boolean.TRUE);
+		return k;
+	}
+
+	// to table
+	@Override
+	public Kontakt addKontakt(Kontakt kontakt) {
+
+		String neuerPk = null;
+
+		if (kontakt.getPk() == null)
+			neuerPk = AbstractPK.create();
+		else
+			neuerPk = kontakt.getPk();
+
+		if (kontakt.getPerson_fk() == null) {
+			log.error("Person_fk missing.");
+			return null;
+		}
+
+		KontaktEntity newKontakt = this.toEntity(kontakt);
+		newKontakt.setKontaktPk(neuerPk);
+
+		KontaktEntity savedKontaktEntity = kontaktRepository.save(newKontakt);
+
+		return this.toModel(savedKontaktEntity);
+	}
+
+	// to table
+	private KontaktEntity toEntity(Kontakt kontakt) {
+
+		KontaktEntity e = new KontaktEntity();
+
+		e.setKontaktPk(kontakt.getPk());
+		e.setPerson_fk(kontakt.getPerson_fk());
+		e.setEmailOrPhone(kontakt.getEmailOrPhone());
+		e.setMessagetyp_Enum(Enum_Messagetyp.valueOf(kontakt.getMessageTyp())); // Enum_Messagetyp.valueOf("EMAIL"));
+		e.setAktiv(true);
+
+		return e;
+	}
+
+	@Override
+	public List<Kontakt> getAlleKontakte() {
+		List<Kontakt> kList = new ArrayList<>();
+
+		List<KontaktEntity> eList = kontaktRepository.findAll();
+		for (KontaktEntity e : eList) {
+			kList.add(toModel(e));
+		}
+		return kList;
+	}
+
+	// from table
+	@Override
+	public Kontakt getKontaktByPk(String pk) {
+		KontaktEntity e = kontaktRepository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Kontakt not exist by PK: " + pk));
+		return toModel(e);
+	}
+
+	@Override
+	public List<Kontakt> getKontaktByPersonFk(String person_fk) {
+
+		List<KontaktEntity> kontaktList = kontaktRepository.findAll();
+
+		List<Kontakt> kontaktWithPersonFk = new ArrayList<>();
+
+		for (KontaktEntity k : kontaktList) {
+			if (person_fk.compareTo(k.getPerson_fk()) == 0) {
+				kontaktWithPersonFk.add(toModel(k));
+			}
+		}
+		return kontaktWithPersonFk;
+	}
+
+	// from table
+	private Kontakt toModel(KontaktEntity entity) {
+		Kontakt m = new Kontakt();
+
+		m.setPk(entity.getKontaktPk());
+		m.setPerson_fk(entity.getPerson_fk());
+		m.setEmailOrPhone(entity.getEmailOrPhone());
+		if (entity.getMessagetyp_Enum() != null)
+			m.setMessageTyp(entity.getMessagetyp_Enum().name());
+		m.setAktiv(entity.isAktiv());
+
+		return m;
+	}
+
+	@Override
+	public Kontakt updateKontakt(String pk, Kontakt kontaktDetails) {
+		/*
+		 * List<KontaktEntity> allKontakt = kontaktRepository.findAll();
+		 * 
+		 * KontaktEntity editKontakt = null;
+		 * 
+		 * for (KontaktEntity k : allKontakt) { if (pk.compareTo(k.getKontaktPk()) == 0)
+		 * { editKontakt = k; System.out.println(editKontakt.toString()); break; } }
+		 * 
+		 * if (editKontakt != null) {
+		 * editKontakt.setMessagetyp_Enum(Enum_Messagetyp.valueOf(kontaktDetails.
+		 * getMessageTyp()));
+		 * editKontakt.setEmailOrPhone(kontaktDetails.getEmailOrPhone());
+		 * editKontakt.setAktiv(kontaktDetails.getAktiv()); }
+		 * 
+		 * KontaktEntity editedKontakt = kontaktRepository.save(editKontakt);
+		 * 
+		 * return this.toModel(editedKontakt);
+		 */
+		KontaktEntity getKontaktByPk = kontaktRepository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Kontakt with pk not exist: " + pk));
+
+		getKontaktByPk.setMessagetyp_Enum(Enum_Messagetyp.valueOf(kontaktDetails.getMessageTyp()));
+		getKontaktByPk.setEmailOrPhone(kontaktDetails.getEmailOrPhone());
+		getKontaktByPk.setAktiv(kontaktDetails.getAktiv());
+
+		KontaktEntity updatedKontakt = kontaktRepository.save(getKontaktByPk);
+
+		return this.toModel(updatedKontakt);
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> deleteKontaktByPersonPk(String personPk) {
+
+		List<KontaktEntity> kontaktDelete = kontaktRepository.findAll();
+
+		KontaktEntity kontakt = null;
+
+		for (KontaktEntity k : kontaktDelete) {
+			if (personPk.compareTo(k.getPerson_fk()) == 0) {
+				kontakt = k;
+				break;
+			}
+		}
+		if (kontakt != null) {
+			kontaktRepository.delete(kontakt);
+		}
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted Kontakt", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Boolean>> deleteKontaktByKontaktPk(String pk) {
+
+		KontaktEntity deleteKontakt = kontaktRepository.findById(pk)
+				.orElseThrow(() -> new ResourceNotFoundException("Kontakt with pk not exist" + pk));
+
+		kontaktRepository.delete(deleteKontakt);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
+
+	@Override
+	public String uploadKontakt(MultipartFile file) throws Exception {
+
+		List<KontaktEntity> kontaktList = new ArrayList<>();
+
+		InputStream inputStream = file.getInputStream();
+
+		CsvParserSettings setting = new CsvParserSettings();
+
+		CsvParser parser = new CsvParser(setting);
+
+		List<Record> parseAllRecords = parser.parseAllRecords(inputStream);
+
+		for (Record p : parseAllRecords) {
+			System.out.println(p.toString());
+		}
+
+		parseAllRecords.forEach(record -> {
+			KontaktEntity kontakt = new KontaktEntity();
+
+			kontakt.setKontaktPk(record.getString("Kontakt_fk"));
+
+			kontakt.setEmailOrPhone(record.getString("EmailorPhone"));
+
+			kontaktList.add(kontakt);
+
+		});
+		
+		System.out.println(kontaktList.toString());
+
+
+		return "KontaktList are uploaded";
+	}
+	
+	@Override
+	public List<Kontakt> uploadKontaktModel(MultipartFile file) throws Exception {
+
+		List<Kontakt> kontaktList = new ArrayList<>();
+
+		InputStream inputStream = file.getInputStream();
+
+		CsvParserSettings setting = new CsvParserSettings();
+
+		CsvParser parser = new CsvParser(setting);
+
+		List<Record> parseAllRecords = parser.parseAllRecords(inputStream);
+
+		for (Record p : parseAllRecords) {
+			System.out.println(p.toString());
+		}
+
+		parseAllRecords.forEach(record -> {
+			Kontakt kontakt = new Kontakt();
+
+			kontakt.setKontaktPk(record.getString("Kontakt_fk"));
+
+			kontakt.setEmailOrPhone(record.getString("EmailorPhone"));
+
+			kontaktList.add(kontakt);
+
+		});
+		
+		System.out.println(kontaktList.toString());
+
+
+		return kontaktList;
+	}
+
+}

@@ -1,0 +1,37 @@
+
+package de.ems.addressbuch.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import de.ems.addressbuch.model.Anschrift;
+import de.ems.addressbuch.model.CompleteAddress;
+import de.ems.addressbuch.model.Kontakt;
+import de.ems.addressbuch.model.Person;
+
+
+@Service
+public interface CompleteAddressService {
+
+	public List<CompleteAddress> getCompleteAddressList();
+	
+	public CompleteAddress getCompleteAddressByPersonPk(String pk);
+	
+	public List<CompleteAddress> removeAddressByPersonPk(String pk);
+	
+	public CompleteAddress createPersonPk();
+	
+	public CompleteAddress addNewPersonAddress(Person personWithPk);
+	
+	public CompleteAddress createKontaktPk(String person_Pk);
+	
+	public CompleteAddress addNewKontaktAddress(Kontakt addressWithKontaktPk);
+	
+	public CompleteAddress createAnschriftPk(String person_Pk);
+	
+	public CompleteAddress addNewAnschriftAddress(Anschrift anschriftWithAnschriftPk);
+	
+	
+	
+}
