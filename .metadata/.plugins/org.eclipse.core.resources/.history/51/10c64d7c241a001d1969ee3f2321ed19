@@ -1,4 +1,0 @@
-spring.datasource.url=jdbc:mysql://192.168.1.207:3306/adrdb?permitMysqlScheme&autoReconnect=true&serverTimezone=GMT
-spring.datasource.username=adradmin
-spring.datasource.password=test
-

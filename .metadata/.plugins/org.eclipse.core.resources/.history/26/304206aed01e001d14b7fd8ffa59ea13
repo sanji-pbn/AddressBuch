@@ -1,5 +1,0 @@
-package de.ems.addressbuch.enumerations;
-
-public enum Enum_Anschriftentyp {
-
-}

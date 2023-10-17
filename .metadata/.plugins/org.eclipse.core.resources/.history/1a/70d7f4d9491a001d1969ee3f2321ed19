@@ -1,9 +1,0 @@
-package de.ems.addressbuch.repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import de.ems.addressbuch.model.Person;
-
-public interface PersonenRepository extends JpaRepository<Person, Long> {
-
-}

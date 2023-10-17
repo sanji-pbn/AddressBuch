@@ -1,7 +1,0 @@
-package de.ems.addressbuch.service;
-
-
-public interface KontaktService {
-	
-	
-}
